@@ -7,8 +7,14 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const mongoose = require('mongoose');
 const { deserializeUser } = require('passport');
 const User = mongoose.model('User');
-
+// options is an object literal containing options to control
+// how the token is extracted from the request or verified
 const options = {}
+// jwtFromRequest (REQUIRED) function that accepts a request as the 
+// only parameter and returns either the JWT as string or null
+
+// fromAuthenticationAsBearerToken() creates an extractor that looks for
+// the JWT in the auth header
 options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 options.secretOrKey = process.env.JWT_SECRET;
 
@@ -25,5 +31,6 @@ module.exports = (passport) => {
             }
 
         })
+        .catch(err => console.log(err));
     }));
 }
