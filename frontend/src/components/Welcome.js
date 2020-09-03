@@ -7,3 +7,4 @@ const Welcome = () => {
         </div>
     )
 }
+export default Welcome;
