@@ -9,7 +9,8 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 
 // load user model
-const User = require('../../models/User')
+const User = require('../../models/User');
+const { db } = require('../../models/User');
 
 // GET api/users/test (public)
 router.get('/test', (req, res) => {
@@ -45,6 +46,39 @@ router.post('/register', (req, res) => {
             });
         }
     })
+});
+
+router.post('/login', (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    // Find a user via email
+    User.findOne({ email})
+    .then(user => {
+        if(!user) {
+            res.status(400).json({ msg: 'User not found'})
+        } else {
+            // check passwork with bcrypt
+            bcrypt.compare(password, user.password)
+            .then(isMatch => {
+                if(isMatch) {
+                    // User match, send JSON web token
+                    // create token payload (you can include anything you want in payload)
+                    const payload = {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email
+                    };
+                    // Sign token
+                    jwt.sign(payload, JWT_SECRET, { expiresIn: 3600}, (error, token) => {
+                        res.json({ success: true, token: `Bearer ${token}`})
+                    });
+                } else {
+                    return res.status(400).json({ password: 'Password or email is incorrect'});
+                }
+            })
+        }
+    });
 });
 
 module.exports = router;
