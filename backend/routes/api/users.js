@@ -23,7 +23,7 @@ router.post('/register', (req, res) => {
     User.findOne({ email: req.body.email })
     .then(user => {
         // if email already exists, send a 400 status
-        if(user) {
+        if(!user) {
             return res.status(400).json({ msg: 'Email already exists'});
         } else {
             // create new user

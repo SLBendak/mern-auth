@@ -5,7 +5,7 @@ import setAuthToken from './utils/setAuthToken';
 import Navbar from './components/Navbar';
 import Signup from './components/Signup';
 import Login from './components/Login';
-// import Profile from './components/Profile';
+import Profile from './components/Profile';
 import Welcome from './components/Welcome';
 import About from './components/About';
 import Footer from './components/Footer';
@@ -61,10 +61,10 @@ function App() {
           <Route path="/signup" component={ Signup } />
           <Route 
             path="/login" 
-            render={ (props) => <Login {...props} setCurrentUser={setCurrentUser} setIsAuthenticated={setIsAuthenticated} user={currentUser}/>}  
+            render={ (props) => <Login {...props} nowCurrentUser={nowCurrentUser} setIsAuthenticated={setIsAuthenticated} user={currentUser}/>}  
           />
-          <Route to="/about" component={ About } />
-          {/* <PrivateRoute path="/profile" component={ Profile } user={currentUser} /> */}
+          <Route path="/about" component={ About } />
+          <PrivateRoute path="/profile" component={ Profile } user={currentUser} />
           <Route exact path="/" component={ Welcome } />
         </Switch>
       </div>
